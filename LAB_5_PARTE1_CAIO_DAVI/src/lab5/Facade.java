@@ -2,10 +2,10 @@ package lab5;
 
 public class Facade {
 
-	private Controller controletotal;
+	private ControllerCliente controletotal;
 
 	public Facade() {
-		controletotal=new Controller();
+		controletotal=new ControllerCliente();
 	}
 
 }

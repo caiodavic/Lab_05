@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 import util.Validacao;
 
-public class Controller {
+public class ControllerCliente {
 
 	private HashMap<String, Cliente> clientes;
 
 	private Validacao validador;
 
-	public Controller() {
+	public ControllerCliente() {
 		this.clientes = new HashMap<>();
 		this.validador = new Validacao();
 
@@ -27,7 +27,7 @@ public class Controller {
 		if (!clientes.containsKey(cpf)) {
 			Cliente clienteaux = new Cliente(cpf, nome, email, loc);
 			clientes.put(cpf, clienteaux);
-			cpfreturn = cpf;
+			cpfreturn = clientes.get(cpf).getCpf();
 		} else {
 
 			cpfreturn = "CPF JÁ CADASTRADO!";
