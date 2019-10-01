@@ -1,4 +1,4 @@
-package lab5;
+	package lab5;
 
 import util.Validacao;
 
@@ -14,10 +14,10 @@ public class Cliente {
 		public Cliente(String cpf, String nome, String email, String loc) {
 			validador = new Validacao();
 				 
-			validador.validaNulleVazio(cpf);
-			validador.validaNulleVazio(nome);
-			validador.validaNulleVazio(email);
-			validador.validaNulleVazio(loc);
+			validador.validaNulleVazio(cpf, "Erro no cadastro do cliente: email nao pode ser vazio ou nulo."  );
+			validador.validaNulleVazio(nome, "Erro no cadastro do cliente: nome nao pode ser vazio ou nulo.");
+			validador.validaNulleVazio(email, "Erro no cadastro do cliente: email nao pode ser vazio ou nulo." );
+			validador.validaNulleVazio(loc, "Erro no cadastro do cliente: localizacao nao pode ser vazia ou nula." );
 			
 			this.cpf = cpf;
 			this.nome = nome;

@@ -18,19 +18,19 @@ public class ControllerCliente {
 
 	public String cadastraClientes(String cpf, String nome, String email, String loc) {
 		String cpfreturn = "";
-
-		validador.validaNulleVazio(cpf);
-		validador.validaNulleVazio(nome);
-		validador.validaNulleVazio(email);
-		validador.validaNulleVazio(loc);
+		
+		validador.validaNulleVazio(nome, "Erro no cadastro do cliente: nome nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(email, "Erro no cadastro do cliente: email nao pode ser vazio ou nulo." );
+		validador.validaNulleVazio(loc, "Erro no cadastro do cliente: localizacao nao pode ser vazia ou nula." );
+		validador.validaNulleVazio(cpf, "Erro no cadastro do cliente: email nao pode ser vazio ou nulo."  );
+		validador.validaTamanhoCpf(cpf, "Erro no cadastro do cliente: cpf invalido.");
 
 		if (!clientes.containsKey(cpf)) {
 			Cliente clienteaux = new Cliente(cpf, nome, email, loc);
 			clientes.put(cpf, clienteaux);
 			cpfreturn = clientes.get(cpf).getCpf();
 		} else {
-
-			cpfreturn = "CPF JÁ CADASTRADO!";
+			validador.lancaExcecao("Erro no cadastro do cliente: cliente ja existe.");
 		}
 
 		return cpfreturn;
@@ -39,12 +39,13 @@ public class ControllerCliente {
 
 	public String exibeCliente(String cpf) {
 		String msg = "";
-		validador.validaNulleVazio(cpf);
+		
+		validador.validaNulleVazio(cpf, "Erro na exibicao do cliente: cpf nao pode ser vazio ou nulo.");
 
 		if (clientes.containsKey(cpf)) {
 			msg = clientes.get(cpf).toString();
 		} else {
-			msg = "CPF NÃO CADASTRADO!";
+			validador.lancaExcecao("Erro no cadastro do cliente: cliente ja existe.");
 		}
 
 		return msg;
@@ -64,9 +65,9 @@ public class ControllerCliente {
 	}
 
 	public void editaCadastroCliente(String cpf, String oqAltera, String novoDado) {
-		validador.validaNulleVazio(cpf);
-		validador.validaNulleVazio(oqAltera);
-		validador.validaNulleVazio(novoDado);
+		validador.validaNulleVazio(cpf, "Erro na edicao do cliente: cpf nao pode ser vazio ou nulo." );
+		validador.validaNulleVazio(oqAltera, "Erro na edicao do cliente: atributo nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(novoDado, "Erro na edicao do cliente: novo valor nao pode ser vazio ou nulo.") ;
 		
 		oqAltera = oqAltera.toUpperCase();
 
@@ -85,20 +86,25 @@ public class ControllerCliente {
 				break;
 
 			case "CPF":
-				System.out.println("Impossível alterar CPF");
+				validador.lancaExcecao( "Erro na edicao do cliente: cpf nao pode ser editado.");
 				break;
 
 			default:
-				System.out.println("Dado inexistente");
+				validador.lancaExcecao("Erro na edicao do cliente: atributo nao existe.");
 				break;
 			}
+		} else {
+			validador.lancaExcecao("Erro na edicao do cliente: cliente nao existe.");
+			
 		}
 	}
 
 	public void removeCliente(String cpf) {
-		validador.validaNulleVazio(cpf);	
+		validador.validaNulleVazio(cpf, "Erro na remocao do cliente: cliente nao existe.");	
 		if(clientes.containsKey(cpf)) {
 				clientes.remove(cpf);
+			} else {
+				validador.lancaExcecao("Erro na remocao do cliente: cliente nao existe.");
 			}
 		}
 
