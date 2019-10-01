@@ -59,4 +59,44 @@ public class ControllerFornecedor {
 			}
 		
 		
+		public String exibeTodosFornecedores() {
+			String msg = "";
+
+			if (!fornecedores.isEmpty()) {
+				for (Fornecedor fornecedoraux : this.fornecedores.values()) {
+					msg += fornecedoraux.toString() + "|";
+
+				}
+			}
+
+			return msg;
+		}
+		
+	public void editaCadastroFornecedor(String nome, String oqAltera, String novoDado) {
+		validador.validaNulleVazio(nome, "Erro na edicao do cliente: atributo nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(oqAltera, "Erro na edicao do cliente: atributo nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(novoDado, "Erro na edicao do cliente: novo valor nao pode ser vazio ou nulo.");
+		
+		String chave = concatenaChave(nome);
+		oqAltera = oqAltera.toUpperCase();
+		
+		if(fornecedores.containsKey(chave)) {
+			switch(oqAltera) {
+			
+			case "EMAIL":
+				fornecedores.get(chave).setEmail(novoDado);
+				break;
+			
+			case "TELEFONE":
+				fornecedores.get(chave).setTelefone(novoDado);
+				break;
+										
+			
+			}
+		}
+	}
+	
+	private void verificaEdicao(String cpf) {
+		
+	}
 }

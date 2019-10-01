@@ -55,7 +55,7 @@ public class ControllerCliente {
 
 		if (!clientes.isEmpty()) {
 			for (Cliente clienteaux : this.clientes.values()) {
-				msg = clienteaux.toString() + "|";
+				msg += clienteaux.toString() + "|";
 
 			}
 		}
@@ -63,7 +63,11 @@ public class ControllerCliente {
 		return msg;
 	}
 
-	public void editaCadastro(String cpf, String oqAltera, String novoDado) {
+	public void editaCadastroCliente(String cpf, String oqAltera, String novoDado) {
+		validador.validaNulleVazio(cpf);
+		validador.validaNulleVazio(oqAltera);
+		validador.validaNulleVazio(novoDado);
+		
 		oqAltera = oqAltera.toUpperCase();
 
 		if (clientes.containsKey(cpf)) {
@@ -92,7 +96,8 @@ public class ControllerCliente {
 	}
 
 	public void removeCliente(String cpf) {
-			if(clientes.containsKey(cpf)) {
+		validador.validaNulleVazio(cpf);	
+		if(clientes.containsKey(cpf)) {
 				clientes.remove(cpf);
 			}
 		}

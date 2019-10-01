@@ -15,10 +15,10 @@ public class Validacao {
 	 * Método que verifica o dado inserido, lançando a exceção se o dado for nulo ou vazio.
 	 * @param verifica Parametro a ser verificado.
 	 */
-	public void validaNulleVazio(String verifica) {
+	public void validaNulleVazio(String verifica,String mensagemDeErro) {
 		
-		validaNull(verifica);
-		validaVazio(verifica);
+		validaNull(verifica,mensagemDeErro);
+		validaVazio(verifica,mensagemDeErro);
 		
 	}
 	
@@ -26,9 +26,9 @@ public class Validacao {
 	 * Método que verifica o dado inserido, lançando a exceção se o dado for nulo.
 	 * @param verifica Parametro a ser verificado
 	 */
-	public void validaNull(String verifica) {
+	public void validaNull(String verifica, String mensagemDeErro) {
 		if(verifica == null) {
-			throw new NullPointerException();
+			throw new NullPointerException(mensagemDeErro);
 			
 			
 		}
@@ -39,9 +39,9 @@ public class Validacao {
 	 * Método que verifica o dado inserido, lançando a exceção se o dado for vazio.
 	 * @param verifica Parametro a ser verificado
 	 */
-	public void validaVazio(String verifica) {
+	public void validaVazio(String verifica, String mensagemDeErro) {
 		if("".equals(verifica)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(mensagemDeErro);
 		}
 		
 	}
