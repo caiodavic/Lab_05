@@ -1,16 +1,18 @@
 package lab5;
 
+import java.text.NumberFormat;
+
 import util.Validacao;
 
 public class Produto {
 	
 	private String nome;
 	private String descricao;
-	private float preco;
+	private double preco;
 	
 	private Validacao validador;
 	
-	public Produto(String nome, String descricao, float preco) {
+	public Produto(String nome, String descricao, double preco) {
 		validador = new Validacao();
 		
 		validador.validaNulleVazio(nome, "Erro no cadastro de produto: nome nao pode ser vazio ou nulo.");
@@ -26,11 +28,11 @@ public class Produto {
 	
 	@Override
 	public String toString() {
-		return nome +" - " + descricao + " - " + "R$"+ preco;
+		return nome +" - " + descricao + " - " + "R$"+NumberFormat.getNumberInstance().format(preco);
 	}
 
 
-	public void setPreco(float preco) {
+	public void setPreco(double preco) {
 		this.preco = preco;
 	}
 

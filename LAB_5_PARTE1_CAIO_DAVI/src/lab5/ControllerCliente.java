@@ -45,7 +45,7 @@ public class ControllerCliente {
 		if (clientes.containsKey(cpf)) {
 			msg = clientes.get(cpf).toString();
 		} else {
-			validador.lancaExcecao("Erro no cadastro do cliente: cliente ja existe.");
+			validador.lancaExcecao("Erro na exibicao do cliente: cliente nao existe.");
 		}
 
 		return msg;
@@ -56,11 +56,12 @@ public class ControllerCliente {
 
 		if (!clientes.isEmpty()) {
 			for (Cliente clienteaux : this.clientes.values()) {
-				msg += clienteaux.toString() + "|";
+				msg += clienteaux.toString() + " | ";
 
 			}
+			msg = msg.substring(0, msg.length()-3);
 		}
-
+		
 		return msg;
 	}
 
@@ -77,7 +78,7 @@ public class ControllerCliente {
 				clientes.get(cpf).setNome(novoDado);
 				break;
 
-			case "LOCALIZAÇÃO":
+			case "LOCALIZACAO":
 				clientes.get(cpf).setLoc(novoDado);
 				break;
 
@@ -101,6 +102,7 @@ public class ControllerCliente {
 
 	public void removeCliente(String cpf) {
 		validador.validaNulleVazio(cpf, "Erro na remocao do cliente: cliente nao existe.");	
+		
 		if(clientes.containsKey(cpf)) {
 				clientes.remove(cpf);
 			} else {

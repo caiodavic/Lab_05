@@ -18,16 +18,16 @@ public class ControllerFornecedor {
 
 	public String cadastraFornecedor(String nome, String email, String telefone) {
 		String nomereturn = "";
-
+		Fornecedor fornecedorAux;
 		validador.validaNulleVazio(nome, "Erro no cadastro do fornecedor: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(telefone, "Erro no cadastro do fornecedor: telefone nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(email, "Erro no cadastro do fornecedor: email nao pode ser vazio ou nulo.");
 
 		String chave = concatenaChave(nome);
-
+		
 		if (!fornecedores.containsKey(chave)) {
-			Fornecedor fornecedoraux = new Fornecedor(nome, email, telefone);
-			fornecedores.put(chave, fornecedoraux);
+			fornecedorAux = new Fornecedor(nome, email, telefone);
+			fornecedores.put(chave, fornecedorAux);
 			nomereturn = fornecedores.get(chave).getNome();
 		} else {
 			validador.lancaExcecao("Erro no cadastro de fornecedor: fornecedor ja existe.");
@@ -62,9 +62,10 @@ public class ControllerFornecedor {
 
 		if (!fornecedores.isEmpty()) {
 			for (Fornecedor fornecedoraux : this.fornecedores.values()) {
-				msg += fornecedoraux.toString() + "|";
+				msg += fornecedoraux.toString() + " | ";
 
 			}
+			msg = msg.substring(0, msg.length() - 3);
 		}
 
 		return msg;
@@ -98,6 +99,8 @@ public class ControllerFornecedor {
 				break;
 
 			}
+		} else {
+			validador.lancaExcecao("Erro na edicao do fornecedor: fornecedor nao existe.");
 		}
 	}
 
@@ -112,8 +115,8 @@ public class ControllerFornecedor {
 		}
 	}
 
-	public void CadastraProduto(String fornecedor, String nome, String descricao, float preco) {
-		validador.validaNull(fornecedor, "Erro no cadastro de produto: fornecedor nao pode ser vazio ou nulo.");
+	public void cadastraProduto(String fornecedor, String nome, String descricao, double preco) {
+		validador.validaNulleVazio(fornecedor, "Erro no cadastro de produto: fornecedor nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(nome, "Erro no cadastro de produto: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazio ou nulo.");
 		validador.validaInteiro(preco, "Erro no cadastro de produto: preco invalido.");
@@ -154,6 +157,8 @@ public class ControllerFornecedor {
 
 		if (fornecedores.containsKey(chave)) {
 			msg = fornecedores.get(chave).exibeTodosProdutosFornecedor();
+		}else {
+			validador.lancaExcecao("Erro na exibicao de produto: fornecedor nao existe.");
 		}
 
 		return msg;
@@ -164,13 +169,13 @@ public class ControllerFornecedor {
 
 		if (!fornecedores.isEmpty()) {
 			for (Fornecedor fornecedorAux : fornecedores.values())
-				msg += fornecedorAux.exibeTodosProdutosFornecedor() + "|";
+				msg += fornecedorAux.exibeTodosProdutosFornecedor() + " | ";
 		}
 
 		return msg;
 	}
 
-	public void editaProduto(String fornecedor, String nome, String descricao, int novoPreco) {
+	public void editaProduto(String fornecedor, String nome, String descricao, double novoPreco) {
 
 		validador.validaNulleVazio(fornecedor, "Erro na edicao de produto: fornecedor nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(nome, "Erro na edicao de produto: nome nao pode ser vazio ou nulo.");
@@ -200,7 +205,7 @@ public class ControllerFornecedor {
 			if (fornecedores.containsKey(chave)) {
 				fornecedores.get(chave).removeProdutoFornecedor(nome, descricao);
 			} else {
-				validador.lancaExcecao("Erro na remocao do fornecedor: fornecedor nao existe.");
+				validador.lancaExcecao("Erro na remocao do produto: produto nao existe.");
 			}
 		}
 

@@ -16,11 +16,12 @@ public class Fornecedor {
 	private Validacao validador;
 
 	public Fornecedor(String nome, String email, String telefone) {
-
+		validador = new Validacao();
+		
 		validador.validaNulleVazio(nome, "Erro no cadastro do fornecedor: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(telefone, "Erro no cadastro do fornecedor: telefone nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(email, "Erro no cadastro do fornecedor: email nao pode ser vazio ou nulo.");
-
+		
 		this.nome = nome;
 		this.email = email;
 		this.telefone = telefone;
@@ -46,7 +47,7 @@ public class Fornecedor {
 		return nome + " - " + email + " - " + telefone;
 	}
 
-	public void cadastraProdutoFornecedor(String nome, String descricao, float preco) {
+	public void cadastraProdutoFornecedor(String nome, String descricao, double preco) {
 		validador.validaNulleVazio(nome, "Erro no cadastro de produto: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazio ou nulo.");
 		validador.validaInteiro(preco, "Erro no cadastro de produto: preco invalido.");
@@ -84,14 +85,16 @@ public class Fornecedor {
 		String msg = "";
 		if (!produtos.isEmpty()) {
 			for (Produto produtoAux : this.produtos.values()) {
-				msg += nome + produtoAux.toString() + "|";
+				msg += nome + " - " + produtoAux.toString() + " | ";
 			}
+			
+			msg = msg.substring(0, msg.length() - 3);
 		}
 
 		return msg;
 	}
 
-	public void editaProdutoFornecedor(String nome, String descricao, float novoPreco) {
+	public void editaProdutoFornecedor(String nome, String descricao, double novoPreco) {
 		validador.validaNulleVazio(nome, "Erro na edicao de produto: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(descricao, "Erro na edicao de produto: descricao nao pode ser vazia ou nula.");
 		validador.validaInteiro(novoPreco, "Erro na edicao de produto: preco invalido.");

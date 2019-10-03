@@ -18,7 +18,7 @@ public class Cliente {
 			validador.validaNulleVazio(nome, "Erro no cadastro do cliente: nome nao pode ser vazio ou nulo.");
 			validador.validaNulleVazio(email, "Erro no cadastro do cliente: email nao pode ser vazio ou nulo." );
 			validador.validaNulleVazio(loc, "Erro no cadastro do cliente: localizacao nao pode ser vazia ou nula." );
-			
+			validador.validaTamanhoCpf(cpf, "Erro no cadastro do cliente: cpf invalido");
 			this.cpf = cpf;
 			this.nome = nome;
 			this.email = email;
@@ -52,7 +52,7 @@ public class Cliente {
 
 		@Override
 		public String toString() {
-			return nome + "-" + loc + "-" + email;
+			return nome + " - " + loc + " - " + email;
 		}
 
 		@Override

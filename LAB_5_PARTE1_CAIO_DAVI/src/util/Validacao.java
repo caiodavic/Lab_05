@@ -19,7 +19,7 @@ public class Validacao {
 	 * @param verifica Parametro a ser verificado.
 	 */
 	public void validaNulleVazio(String verifica, String mensagemDeErro) {
-
+		
 		validaNull(verifica, mensagemDeErro);
 		validaVazio(verifica, mensagemDeErro);
 
@@ -31,6 +31,7 @@ public class Validacao {
 	 * @param verifica Parametro a ser verificado
 	 */
 	public void validaNull(String verifica, String mensagemDeErro) {
+		
 		if (verifica == null) {
 			throw new NullPointerException(mensagemDeErro);
 
@@ -44,6 +45,7 @@ public class Validacao {
 	 * @param verifica Parametro a ser verificado
 	 */
 	public void validaVazio(String verifica, String mensagemDeErro) {
+		
 		if ("".equals(verifica)) {
 			throw new IllegalArgumentException(mensagemDeErro);
 		}
@@ -61,7 +63,7 @@ public class Validacao {
 		throw new IllegalArgumentException(mensagem);
 	}
 
-	public void validaInteiro(float preco, String mensagemDeErro) {
+	public void validaInteiro(double preco, String mensagemDeErro) {
 		if (preco <= 0) {
 			throw new IllegalArgumentException(mensagemDeErro);
 
