@@ -4,14 +4,37 @@ import java.text.NumberFormat;
 
 import util.Validacao;
 
+/**
+* Clase que representa um Produduto do sistema SAGA, com Nome, descrição e preço. Seu nome e sua descrição são seus identificadores únicos.
+* @author Caio Davi Pereira da Silva - 119110875
+*
+*/
 public class Produto {
 	
+	/**
+	 * Nome do Produto.
+	 */
 	private String nome;
+	/**
+	 * Descrição do Produto.
+	 */
 	private String descricao;
+	/**
+	 * Preço do Produto.
+	 */
 	private double preco;
 	
+	/**
+	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
+	 */
 	private Validacao validador;
 	
+	/**
+	 * Construtor da Classe Produto, recebendo parâmetros que não podem ser vazios ou nulos. Caso algum seja, lançará uma exceção.
+	 * @param nome Nome do Produto.
+	 * @param descricao Descrição do Produto.
+	 * @param preco Preço do Produto.
+	 */
 	public Produto(String nome, String descricao, double preco) {
 		validador = new Validacao();
 		
@@ -25,18 +48,26 @@ public class Produto {
 		
 	}
 	
-	
+	/**
+	 * Método que retorna uma representação textual de um Produto, com nome, descrição e preço.
+	 */
 	@Override
 	public String toString() {
 		return nome +" - " + descricao + " - " + "R$"+NumberFormat.getNumberInstance().format(preco);
 	}
 
-
+	/**
+	 * Método de alteração do preço do Produto
+	 * @param preco Preço que substituirá o antigo.
+	 */
 	public void setPreco(double preco) {
 		this.preco = preco;
 	}
 
-
+	
+	/**
+	 * HashCode de Produto. Faz a comparação entre dois objetos do tipo Produto, e se ambos tiverem o mesmo Nome e Descrição, retornará  um número inteiro igual.
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -45,7 +76,10 @@ public class Produto {
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
-
+	
+	/**
+	 * Método que compara dois objetos do tipo Produto e retorna true, caso tenham Nomes e Descrição iguais, ou false caso contrário.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

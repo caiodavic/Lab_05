@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import lab5.Fornecedor;
 
-class FornecedorTest {
+class FornecedorTeste {
 
 	Fornecedor teste;
 
