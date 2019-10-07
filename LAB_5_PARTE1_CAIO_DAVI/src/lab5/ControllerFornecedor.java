@@ -2,7 +2,7 @@ package lab5;
 
 import java.util.HashMap;
 
-import util.Validacao;
+import utilcaio.Validacao;
 
 /**
  * Classe controle de Fornecedor e Produto. É nessa classe que temos os métodos
@@ -124,8 +124,8 @@ public class ControllerFornecedor {
 	 */
 	public void editaCadastroFornecedor(String nome, String oqAltera, String novoDado) {
 		validador.validaNulleVazio(nome, "Erro na edicao do fornecedor: nome nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(oqAltera, "Erro na edicao do cliente: atributo nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(novoDado, "Erro na edicao do cliente: novo valor nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(oqAltera, "Erro na edicao do fornecedor: atributo nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(novoDado, "Erro na edicao do fornecedor: novo valor nao pode ser vazio ou nulo.");
 
 		String chave = concatenaChave(nome);
 		oqAltera = oqAltera.toUpperCase();
@@ -183,7 +183,7 @@ public class ControllerFornecedor {
 	public void cadastraProduto(String fornecedor, String nome, String descricao, double preco) {
 		validador.validaNulleVazio(fornecedor, "Erro no cadastro de produto: fornecedor nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(nome, "Erro no cadastro de produto: nome nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazia ou nula.");
 		validador.validaInteiro(preco, "Erro no cadastro de produto: preco invalido.");
 
 		String chave = concatenaChave(fornecedor);
@@ -209,7 +209,7 @@ public class ControllerFornecedor {
 		String msg = "";
 		validador.validaNulleVazio(fornecedor, "Erro na exibicao de produto: fornecedor nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(nome, "Erro na exibicao de produto: nome nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(descricao, "Erro na exibicao de produto: descricao nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(descricao, "Erro na exibicao de produto: descricao nao pode ser vazia ou nula.");
 
 		String chave = concatenaChave(fornecedor);
 
@@ -271,7 +271,7 @@ public class ControllerFornecedor {
 	 * @param descricao  Descrição do produto que se deseja alterar.
 	 * @param novoPreco  Preço novo que irá subsituir o antigo.
 	 */
-	public void editaProduto(String fornecedor, String nome, String descricao, double novoPreco) {
+	public void editaProduto(String nome, String descricao, String fornecedor, double novoPreco) {
 
 		validador.validaNulleVazio(fornecedor, "Erro na edicao de produto: fornecedor nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(nome, "Erro na edicao de produto: nome nao pode ser vazio ou nulo.");
@@ -297,18 +297,18 @@ public class ControllerFornecedor {
 	 * @param nome      Nome do produto a ser removido.
 	 * @param descricao Descrição do produto a ser removido.
 	 */
-	public void removeProduto(String fornecedor, String nome, String descricao) {
+	public void removeProduto(String nome, String descricao, String fornecedor) {
 
-		validador.validaNulleVazio(fornecedor, "Erro na remocao do produto: fornecedor nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(nome, "Erro na remocao do produto: nome nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(descricao, "Erro na remocao do produto: descricao nao pode ser vazia ou nula.");
+		validador.validaNulleVazio(fornecedor, "Erro na remocao de produto: fornecedor nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(nome, "Erro na remocao de produto: nome nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(descricao, "Erro na remocao de produto: descricao nao pode ser vazia ou nula.");
 
 		String chave = concatenaChave(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 			fornecedores.get(chave).removeProdutoFornecedor(nome, descricao);
 		} else {
-			validador.lancaExcecao("Erro na remocao do produto: produto nao existe.");
+			validador.lancaExcecao("Erro na remocao de produto: fornecedor nao existe.");
 		}
 	}
 

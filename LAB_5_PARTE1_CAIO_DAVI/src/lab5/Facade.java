@@ -1,5 +1,7 @@
 package lab5;
 
+import easyaccept.EasyAccept;
+
 public class Facade {
 
 	private ControllerCliente controleCliente;
@@ -10,11 +12,11 @@ public class Facade {
 		controleFornecedor = new ControllerFornecedor();
 	}
 
-	public String cadastraClientesFacade(String cpf, String nome, String email, String loc) {
+	public String adicionaCliente(String cpf, String nome, String email, String loc) {
 		return controleCliente.cadastraClientes(cpf, nome, email, loc);
 	}
 
-	public String exibeClienteFacade(String cpf) {
+	public String exibeCliente(String cpf) {
 		return controleCliente.exibeCliente(cpf);
 	}
 
@@ -22,40 +24,40 @@ public class Facade {
 		return controleCliente.exibeTodosClientes();
 	}
 
-	public void editaCadastroClienteFacade(String cpf, String oqAltera, String novoDado) {
+	public void editaCliente(String cpf, String oqAltera, String novoDado) {
 		controleCliente.editaCadastroCliente(cpf, oqAltera, novoDado);
 	}
 
-	public void removeClienteFacade(String cpf) {
+	public void removeCliente(String cpf) {
 		controleCliente.removeCliente(cpf);
 	}
 
-	public String cadastraFornecedorFacade(String nome, String email, String telefone) {
+	public String adicionaFornecedor(String nome, String email, String telefone) {
 		return controleFornecedor.cadastraFornecedor(nome, email, telefone);
 
 	}
 
-	public String exibeFornecedorFacade(String nome) {
+	public String exibeFornecedor(String nome) {
 		return controleFornecedor.exibeFornecedor(nome);
 	}
 
-	public String exibeTodosFornecedoresFacade() {
+	public String exibeTodosFornecedores() {
 		return controleFornecedor.exibeTodosFornecedores();
 	}
 
-	public void editaCadastroFornecedorFacade(String nome, String oqAltera, String novoDado) {
+	public void editaFornecedor(String nome, String oqAltera, String novoDado) {
 		controleFornecedor.editaCadastroFornecedor(nome, oqAltera, novoDado);
 	}
 
-	public void removeFornecedorFacade(String nome) {
+	public void removeFornecedor(String nome) {
 		controleFornecedor.removeFornecedor(nome);
 	}
 	
-	public void cadastraProdutoFacade(String fornecedor, String nome, String descricao, double preco) {
+	public void adicionaProduto(String fornecedor, String nome, String descricao, double preco) {
 		controleFornecedor.cadastraProduto(fornecedor, nome, descricao, preco);
 		}
 	
-	public String exibeProdutoFacade(String fornecedor, String nome, String descricao) {
+	public String exibeProduto(String nome, String descricao, String fornecedor) {
 		return controleFornecedor.exibeProduto(fornecedor, nome, descricao);
 	}
 	
@@ -75,6 +77,10 @@ public class Facade {
 		controleFornecedor.removeProduto(fornecedor, nome, descricao);
 	}
 	
+	public static void main(String[] args) {
+		args = new String[] {"lab5.Facade", "testesEA/use_case_1.txt", "testesEA/use_case_2.txt", "testesEA/use_case_3.txt"};
+		EasyAccept.main(args);
+	}
 	
 	
 	
