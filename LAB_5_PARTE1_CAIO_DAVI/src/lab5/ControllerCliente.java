@@ -1,5 +1,7 @@
 package lab5;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import utilcaio.Validacao;
@@ -162,6 +164,34 @@ public class ControllerCliente {
 		} else {
 			validador.lancaExcecao("Erro na remocao do cliente: cliente nao existe.");
 		}
+	}
+	
+	/**
+	 * Método privado que ordena todos os Clientes do mapa de Clientes em um ArrayList, a partir do seu nome;
+	 * @return um ArrayList com todos os Clientes do sistema ordenados pelo seus respectivos nomes;
+	 */
+	private ArrayList<Cliente> ordenaClientes() {
+		ArrayList<Cliente> clientesArray = new ArrayList<>(this.clientes.values());
+		
+		Collections.sort(clientesArray);
+		
+		return clientesArray;
+	}
+	
+	/**
+	 * Método responsável por exibir os Clientes de forma ordenada usando o nome como referência.
+	 * @return	uma String como todos os clientes ordenados por ordem alfabética usando o nome como referência.
+	 */
+	public String exibeClientesOrdenados() {
+		String msg = "";
+		
+		for(Cliente clienteAux: ordenaClientes()) {
+			msg += clienteAux.toString() + " | ";			
+		}
+		
+		msg.substring(0, msg.length() - 3);
+		
+		return msg;
 	}
 
 }

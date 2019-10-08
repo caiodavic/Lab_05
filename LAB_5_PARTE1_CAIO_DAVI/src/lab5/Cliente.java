@@ -9,8 +9,9 @@ import utilcaio.Validacao;
  * @author Caio Davi Pereira da Silva - 119110875
  *
  */
-public class Cliente {
-
+public class Cliente implements Comparable<Cliente>{
+	
+	
 	/**
 	 * CPF do cliente.
 	 */
@@ -32,6 +33,8 @@ public class Cliente {
 	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
 	 */
 	private Validacao validador;
+	
+		
 
 	/**
 	 * Construtor da classe Cliente, recebendo parâmetros que não podem ser vazios
@@ -65,7 +68,7 @@ public class Cliente {
 	public String getCpf() {
 		return cpf;
 	}
-
+	
 	/**
 	 * Método de alteração do Nome do Cliente.
 	 * 
@@ -74,6 +77,11 @@ public class Cliente {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public String getNome() {
+		return nome;
+	}
+
 
 	/**
 	 * Método de alteração do Email do Cliente.
@@ -135,4 +143,13 @@ public class Cliente {
 		return true;
 	}
 
+	/**
+	 * Compara o nome do Cliente e de outro Cliente do sistema e retorna o inteiro que significa qual vem primeiro na ordem alfabética.
+	 */
+	@Override
+	public int compareTo(Cliente o) {
+		return this.nome.compareTo(o.getNome());
+	}
+
+	
 }

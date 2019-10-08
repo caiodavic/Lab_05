@@ -1,5 +1,7 @@
 package lab5;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import utilcaio.Validacao;
@@ -311,5 +313,51 @@ public class ControllerFornecedor {
 			validador.lancaExcecao("Erro na remocao de produto: fornecedor nao existe.");
 		}
 	}
+	
+	/**
+	 * Método privado que ordena todos os Fornecedores do mapa de Fornecedores em um ArrayList, a partir do seu nome;
+	 * @return um ArrayList com todos os Fornecedores do sistema ordenados pelo seus respectivos nomes;
+	 */
+	private ArrayList<Fornecedor> ordenaFornecedores() {
+		ArrayList<Fornecedor> fornecedoresArray = new ArrayList<>(this.fornecedores.values());
+		
+		Collections.sort(fornecedoresArray);
+		
+		return fornecedoresArray;
+	}
+	
+	/**
+	 * Método responsável por exibir os Fornecedores de forma ordenada usando o nome como referência.
+	 * @return	uma String como todos os fornecedores ordenados por ordem alfabética usando o nome como referência.
+	 */
+	public String exibeFornecedoresOrdenados() {
+		String msg = "";
+		
+		for(Fornecedor fornecedorAux: ordenaFornecedores()) {
+			msg += fornecedorAux.toString() + " | ";			
+		}
+		
+		msg.substring(0, msg.length() - 3);
+		
+		return msg;
+	}
+	
+	/**
+	 * Método responsável por exibir todos os Produtos de forma ordenada usando o nome do Fornecedor como referência.
+	 * @return	uma String como todos os Produtos ordenados por usando o nome do fornecedor como referência.
+	 */
+	public String exibeTodosProdutosOrdenados() {
+		String msg = "";
+		
+		for(Fornecedor fornecedorAux: ordenaFornecedores()) {
+			msg += fornecedorAux.exibeTodosProdutosFornecedor() + " | ";
+		}
+		
+		msg.substring(0, msg.length() - 3);
+		
+		return msg;
+	}
+	
+
 
 }

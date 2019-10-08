@@ -13,7 +13,7 @@ import utilcaio.Validacao;
  * @author Caio Davi Pereira da Silva - 119110875
  *
  */
-public class Fornecedor {
+public class Fornecedor implements Comparable<Fornecedor> {
 
 	/**
 	 * Nome do Fornecedor.
@@ -255,6 +255,14 @@ public class Fornecedor {
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
+	}
+	
+	/**
+	 * Compara o nome do Fornecedor e de outro Fornecedor do sistema e retorna o inteiro que significa qual vem primeiro na ordem alfabética.
+	 */
+	@Override
+	public int compareTo(Fornecedor o) {
+		return this.nome.compareTo(o.getNome());
 	}
 
 }
