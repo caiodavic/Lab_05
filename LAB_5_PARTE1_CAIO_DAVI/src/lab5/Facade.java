@@ -20,8 +20,8 @@ public class Facade {
 		return controleCliente.exibeCliente(cpf);
 	}
 
-	public String exibeTodosClientesFacade() {
-		return controleCliente.exibeTodosClientes();
+	public String exibeClientes() {
+		return controleCliente.exibeClientesOrdenados();
 	}
 
 	public void editaCliente(String cpf, String oqAltera, String novoDado) {
@@ -41,8 +41,8 @@ public class Facade {
 		return controleFornecedor.exibeFornecedor(nome);
 	}
 
-	public String exibeTodosFornecedores() {
-		return controleFornecedor.exibeTodosFornecedores();
+	public String exibeFornecedores() {
+		return controleFornecedor.exibeFornecedoresOrdenados();
 	}
 
 	public void editaFornecedor(String nome, String oqAltera, String novoDado) {
@@ -61,12 +61,12 @@ public class Facade {
 		return controleFornecedor.exibeProduto(fornecedor, nome, descricao);
 	}
 	
-	public String exibeTodosProdutosDeUmFornecedorFacade(String fornecedor) {
+	public String exibeProdutosFornecedor(String fornecedor) {
 		return controleFornecedor.exibeTodosProdutosDeUmFornecedor(fornecedor);
 	}
 	
-	public String exibeTodosProdutosExistentesFacade() {
-		return controleFornecedor.exibeTodosProdutosExistentes();
+	public String exibeProdutos() {
+		return controleFornecedor.exibeTodosProdutosOrdenados();
 	}
 	
 	public void editaProduto(String fornecedor, String nome, String descricao, double novoPreco) {
@@ -78,7 +78,7 @@ public class Facade {
 	}
 	
 	public static void main(String[] args) {
-		args = new String[] {"lab5.Facade", "testesEA/use_case_1.txt", "testesEA/use_case_2.txt", "testesEA/use_case_3.txt"};
+		args = new String[] {"lab5.Facade", "testesEA/use_case_1.txt", "testesEA/use_case_2.txt", "testesEA/use_case_3.txt" , "testesEA/use_case_4.txt"};
 		EasyAccept.main(args);
 	}
 	

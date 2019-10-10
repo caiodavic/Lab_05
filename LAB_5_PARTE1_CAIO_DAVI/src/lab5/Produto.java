@@ -11,7 +11,7 @@ import utilcaio.Validacao;
  * @author Caio Davi Pereira da Silva - 119110875
  *
  */
-public class Produto {
+public class Produto implements Comparable<Produto>{
 
 	/**
 	 * Nome do Produto.
@@ -69,6 +69,15 @@ public class Produto {
 	public void setPreco(double preco) {
 		this.preco = preco;
 	}
+	
+	/**
+	 * Método de acesso para o nome do Produto.
+	 * 
+	 * @return O nome do Produto.
+	 */
+	public String getNome() {
+		return nome;
+	}
 
 	/**
 	 * HashCode de Produto. Faz a comparação entre dois objetos do tipo Produto, e
@@ -108,5 +117,15 @@ public class Produto {
 			return false;
 		return true;
 	}
+	
+	/**
+	 * Compara o nome do Produto e de outro Produto do fornecedor e retorna o inteiro que significa qual vem primeiro na ordem alfabética.
+	 */
+	@Override
+	public int compareTo(Produto o) {
+		return this.nome.compareTo(o.getNome());
+	}
+
+	
 
 }

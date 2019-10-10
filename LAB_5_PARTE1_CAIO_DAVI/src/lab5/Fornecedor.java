@@ -1,6 +1,7 @@
 package lab5;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import utilcaio.Validacao;
@@ -156,12 +157,15 @@ public class Fornecedor implements Comparable<Fornecedor> {
 	 */
 	public String exibeTodosProdutosFornecedor() {
 		String msg = "";
+		
 		if (!produtos.isEmpty()) {
-			for (Produto produtoAux : this.produtos.values()) {
+			for (Produto produtoAux : ordenaProdutos()) {
 				msg += nome + " - " + produtoAux.toString() + " | ";
-			}
+		}
 
 			msg = msg.substring(0, msg.length() - 3);
+		} else {
+			msg += nome + " -";
 		}
 
 		return msg;
@@ -263,6 +267,18 @@ public class Fornecedor implements Comparable<Fornecedor> {
 	@Override
 	public int compareTo(Fornecedor o) {
 		return this.nome.compareTo(o.getNome());
+	}
+	
+	/**
+	 * Método privado que ordena todos os Produtos do mapa de Produtos em um ArrayList, a partir do seu nome;
+	 * @return um ArrayList com todos os Produtos do fornecedor ordenados pelo seus respectivos nomes;
+	 */
+	private ArrayList<Produto> ordenaProdutos(){
+		ArrayList produtosArray = new ArrayList<Produto>(this.produtos.values());
+		
+		Collections.sort(produtosArray);
+		
+		return produtosArray;
 	}
 
 }

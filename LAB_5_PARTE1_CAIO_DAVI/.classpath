@@ -7,11 +7,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/caio/Documentos/CC/2019.2/Lab de Prog 2/Lab_05/LAB_5_PARTE1_CAIO_DAVI/easyaccept-1.0.3-jar/easyaccept.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="/home/caiodps/lp2/Lab_05/LAB_5_PARTE1_CAIO_DAVI/testesEA/easyaccept.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

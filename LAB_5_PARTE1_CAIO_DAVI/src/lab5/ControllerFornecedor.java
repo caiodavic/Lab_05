@@ -96,25 +96,6 @@ public class ControllerFornecedor {
 		return msg;
 	}
 
-	/**
-	 * Método que exibe uma representação textual de todos os Fornecedores do SAGA.
-	 * 
-	 * @return Uma String com representação textual de todos os Fornecedores
-	 *         cadastrados.
-	 */
-	public String exibeTodosFornecedores() {
-		String msg = "";
-
-		if (!fornecedores.isEmpty()) {
-			for (Fornecedor fornecedoraux : this.fornecedores.values()) {
-				msg += fornecedoraux.toString() + " | ";
-
-			}
-			msg = msg.substring(0, msg.length() - 3);
-		}
-
-		return msg;
-	}
 
 	/**
 	 * Método que altera um dado do Fornecedor. Não é possível alterar o nome de um
@@ -234,7 +215,7 @@ public class ControllerFornecedor {
 	public String exibeTodosProdutosDeUmFornecedor(String fornecedor) {
 		String msg = "";
 
-		validador.validaNulleVazio(fornecedor, "Erro na exibicao de produtos: fornecedor nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(fornecedor, "Erro na exibicao de produto: fornecedor nao pode ser vazio ou nulo.");
 
 		String chave = concatenaChave(fornecedor);
 
@@ -247,23 +228,7 @@ public class ControllerFornecedor {
 		return msg;
 	}
 
-	/**
-	 * Método que exibe todos os Produtos cadastrados no SAGA.
-	 * 
-	 * @return String com a representação textual de todos os produtos cadastrados
-	 *         no SAGA.
-	 */
-	public String exibeTodosProdutosExistentes() {
-		String msg = "";
-
-		if (!fornecedores.isEmpty()) {
-			for (Fornecedor fornecedorAux : fornecedores.values())
-				msg += fornecedorAux.exibeTodosProdutosFornecedor() + " | ";
-		}
-
-		return msg;
-	}
-
+	
 	/**
 	 * Método que altera o preço de um produto, a partir do Nome e Descrição
 	 * inseridos.
@@ -337,7 +302,7 @@ public class ControllerFornecedor {
 			msg += fornecedorAux.toString() + " | ";			
 		}
 		
-		msg.substring(0, msg.length() - 3);
+		msg = msg.substring(0, msg.length() - 3);
 		
 		return msg;
 	}
@@ -353,7 +318,7 @@ public class ControllerFornecedor {
 			msg += fornecedorAux.exibeTodosProdutosFornecedor() + " | ";
 		}
 		
-		msg.substring(0, msg.length() - 3);
+		msg = msg.substring(0, msg.length() - 3);
 		
 		return msg;
 	}

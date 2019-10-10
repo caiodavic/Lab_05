@@ -87,26 +87,7 @@ public class ControllerCliente {
 		return msg;
 	}
 
-	/**
-	 * Método que exibe todos os Clientes cadastrados no SAGA.
-	 * 
-	 * @return Uma String com a representação textual de todos os clientes
-	 *         cadastrados.
-	 */
-	public String exibeTodosClientes() {
-		String msg = "";
-
-		if (!clientes.isEmpty()) {
-			for (Cliente clienteaux : this.clientes.values()) {
-				msg += clienteaux.toString() + " | ";
-
-			}
-			msg = msg.substring(0, msg.length() - 3);
-		}
-
-		return msg;
-	}
-
+	
 	/**
 	 * Método que edita o cadastro de um Cliente a partir do CPF inserido como
 	 * parâmetro. Não se pode alterar o CPF
@@ -189,7 +170,7 @@ public class ControllerCliente {
 			msg += clienteAux.toString() + " | ";			
 		}
 		
-		msg.substring(0, msg.length() - 3);
+		msg = msg.substring(0, msg.length() - 3);
 		
 		return msg;
 	}
