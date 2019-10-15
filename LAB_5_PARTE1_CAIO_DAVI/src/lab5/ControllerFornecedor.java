@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import utilcaio.Padronizacao;
+
 import utilcaio.Validacao;
 
 /**
@@ -25,12 +27,18 @@ public class ControllerFornecedor {
 	private Validacao validador;
 
 	/**
+	 * Objeto da classe de padronização que transforma nomes e descrições em chaves
+	 * para mapas.
+	 */
+	private Padronizacao padronizador;
+
+	/**
 	 * Construtor de ControllerFornecedor.
 	 */
 	public ControllerFornecedor() {
 		this.fornecedores = new HashMap<>();
 		this.validador = new Validacao();
-
+		this.padronizador = new Padronizacao();
 	}
 
 	/**
@@ -48,7 +56,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(telefone, "Erro no cadastro do fornecedor: telefone nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(email, "Erro no cadastro do fornecedor: email nao pode ser vazio ou nulo.");
 
-		String chave = concatenaChave(nome);
+		String chave = padronizador.concatenaChaveFornecedor(nome);
 
 		if (!fornecedores.containsKey(chave)) {
 			fornecedorAux = new Fornecedor(nome, email, telefone);
@@ -59,18 +67,6 @@ public class ControllerFornecedor {
 		}
 
 		return nomereturn;
-
-	}
-
-	/**
-	 * Método privado que concatena as palavras do Nome de um Fornecedor para
-	 * coloca-las como chave do objeto Fornecedor no Map de fornecedores.
-	 * 
-	 * @param nome
-	 * @return
-	 */
-	private String concatenaChave(String nome) {
-		return nome.trim().replace(" ", "").toUpperCase();
 
 	}
 
@@ -86,7 +82,7 @@ public class ControllerFornecedor {
 
 		validador.validaNulleVazio(nome, "Erro na exibicao do fornecedor: nome nao pode ser vazio ou nulo.");
 
-		String chave = concatenaChave(nome);
+		String chave = padronizador.concatenaChaveFornecedor(nome);
 		if (fornecedores.containsKey(chave)) {
 			msg = fornecedores.get(chave).toString();
 		} else {
@@ -95,7 +91,6 @@ public class ControllerFornecedor {
 
 		return msg;
 	}
-
 
 	/**
 	 * Método que altera um dado do Fornecedor. Não é possível alterar o nome de um
@@ -110,7 +105,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(oqAltera, "Erro na edicao do fornecedor: atributo nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(novoDado, "Erro na edicao do fornecedor: novo valor nao pode ser vazio ou nulo.");
 
-		String chave = concatenaChave(nome);
+		String chave = padronizador.concatenaChaveFornecedor(nome);
 		oqAltera = oqAltera.toUpperCase();
 
 		if (fornecedores.containsKey(chave)) {
@@ -146,7 +141,7 @@ public class ControllerFornecedor {
 	public void removeFornecedor(String nome) {
 		validador.validaNulleVazio(nome,
 				"Erro na remocao do fornecedor: nome do fornecedor nao pode ser vazio ou nulo.");
-		String chave = concatenaChave(nome);
+		String chave = padronizador.concatenaChaveFornecedor(nome);
 		if (fornecedores.containsKey(chave)) {
 			fornecedores.remove(chave);
 		} else {
@@ -169,7 +164,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazia ou nula.");
 		validador.validaInteiro(preco, "Erro no cadastro de produto: preco invalido.");
 
-		String chave = concatenaChave(fornecedor);
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 			fornecedores.get(chave).cadastraProdutoFornecedor(nome, descricao, preco);
@@ -194,7 +189,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(nome, "Erro na exibicao de produto: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(descricao, "Erro na exibicao de produto: descricao nao pode ser vazia ou nula.");
 
-		String chave = concatenaChave(fornecedor);
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 			msg = fornecedores.get(chave).exibeProdutoFornecedor(nome, descricao);
@@ -217,7 +212,7 @@ public class ControllerFornecedor {
 
 		validador.validaNulleVazio(fornecedor, "Erro na exibicao de produto: fornecedor nao pode ser vazio ou nulo.");
 
-		String chave = concatenaChave(fornecedor);
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 			msg = fornecedores.get(chave).exibeTodosProdutosFornecedor();
@@ -228,7 +223,6 @@ public class ControllerFornecedor {
 		return msg;
 	}
 
-	
 	/**
 	 * Método que altera o preço de um produto, a partir do Nome e Descrição
 	 * inseridos.
@@ -245,7 +239,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(descricao, "Erro na edicao de produto: descricao nao pode ser vazia ou nula.");
 		validador.validaInteiro(novoPreco, "Erro na edicao de produto: preco invalido.");
 
-		String chave = concatenaChave(fornecedor);
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 
@@ -261,8 +255,8 @@ public class ControllerFornecedor {
 	 * Descrição.
 	 * 
 	 * @param fornecedor Fornecedor do produto a ser removido
-	 * @param nome      Nome do produto a ser removido.
-	 * @param descricao Descrição do produto a ser removido.
+	 * @param nome       Nome do produto a ser removido.
+	 * @param descricao  Descrição do produto a ser removido.
 	 */
 	public void removeProduto(String nome, String descricao, String fornecedor) {
 
@@ -270,7 +264,7 @@ public class ControllerFornecedor {
 		validador.validaNulleVazio(nome, "Erro na remocao de produto: nome nao pode ser vazio ou nulo.");
 		validador.validaNulleVazio(descricao, "Erro na remocao de produto: descricao nao pode ser vazia ou nula.");
 
-		String chave = concatenaChave(fornecedor);
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 
 		if (fornecedores.containsKey(chave)) {
 			fornecedores.get(chave).removeProdutoFornecedor(nome, descricao);
@@ -278,51 +272,206 @@ public class ControllerFornecedor {
 			validador.lancaExcecao("Erro na remocao de produto: fornecedor nao existe.");
 		}
 	}
-	
+
 	/**
-	 * Método privado que ordena todos os Fornecedores do mapa de Fornecedores em um ArrayList, a partir do seu nome;
-	 * @return um ArrayList com todos os Fornecedores do sistema ordenados pelo seus respectivos nomes;
+	 * Método privado que ordena todos os Fornecedores do mapa de Fornecedores em um
+	 * ArrayList, a partir do seu nome;
+	 * 
+	 * @return um ArrayList com todos os Fornecedores do sistema ordenados pelo seus
+	 *         respectivos nomes;
 	 */
 	private ArrayList<Fornecedor> ordenaFornecedores() {
 		ArrayList<Fornecedor> fornecedoresArray = new ArrayList<>(this.fornecedores.values());
-		
+
 		Collections.sort(fornecedoresArray);
-		
+
 		return fornecedoresArray;
 	}
-	
+
 	/**
-	 * Método responsável por exibir os Fornecedores de forma ordenada usando o nome como referência.
-	 * @return	uma String como todos os fornecedores ordenados por ordem alfabética usando o nome como referência.
+	 * Método responsável por exibir os Fornecedores de forma ordenada usando o nome
+	 * como referência.
+	 * 
+	 * @return uma String como todos os fornecedores ordenados por ordem alfabética
+	 *         usando o nome como referência.
 	 */
 	public String exibeFornecedoresOrdenados() {
 		String msg = "";
-		
-		for(Fornecedor fornecedorAux: ordenaFornecedores()) {
-			msg += fornecedorAux.toString() + " | ";			
+
+		for (Fornecedor fornecedorAux : ordenaFornecedores()) {
+			msg += fornecedorAux.toString() + " | ";
 		}
-		
+
 		msg = msg.substring(0, msg.length() - 3);
-		
+
 		return msg;
 	}
-	
+
 	/**
-	 * Método responsável por exibir todos os Produtos de forma ordenada usando o nome do Fornecedor como referência.
-	 * @return	uma String como todos os Produtos ordenados por usando o nome do fornecedor como referência.
+	 * Método responsável por exibir todos os Produtos de forma ordenada usando o
+	 * nome do Fornecedor como referência.
+	 * 
+	 * @return uma String como todos os Produtos ordenados por usando o nome do
+	 *         fornecedor como referência.
 	 */
 	public String exibeTodosProdutosOrdenados() {
 		String msg = "";
-		
-		for(Fornecedor fornecedorAux: ordenaFornecedores()) {
+
+		for (Fornecedor fornecedorAux : ordenaFornecedores()) {
 			msg += fornecedorAux.exibeTodosProdutosFornecedor() + " | ";
 		}
-		
+
 		msg = msg.substring(0, msg.length() - 3);
-		
+
 		return msg;
 	}
-	
 
+	/**
+	 * Método que verifica se Fornecedor existe no sistema, simplificando o código
+	 * em controllerCliente.
+	 * 
+	 * @param fornecedor Nome do fornecedor a ser verificado se existe
+	 * @return true caso existe, false caso contrario
+	 */
+	public boolean existeFornecedor(String fornecedor) {
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		return fornecedores.containsKey(chave);
+
+	}
+
+	/**
+	 * Método que verifica se produto existe no sitema, simplificando o código em
+	 * controllerCliente.
+	 * 
+	 * @param fornecedor       Fornecedor do produto a ser consultado.
+	 * @param nomeProduto      Nome do produto a ser consultado.
+	 * @param descricaoProduto Descrição do produto a ser consultado.
+	 * @return true caso existe, false caso contrario
+	 */
+	public boolean existeProduto(String fornecedor, String nomeProduto, String descricaoProduto) {
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		return fornecedores.get(chave).existeProduto(nomeProduto, descricaoProduto);
+	}
+
+	/**
+	 * Método que acessa o nome do produto de um determinado fornecedor, da forma
+	 * que o produto foi cadastrado.
+	 * 
+	 * @param fornecedor       Fornecedor do produto a ser acessado
+	 * @param nomeProduto      nome do produto a ser acessado
+	 * @param descricaoProduto descrição do produto a ser acessado
+	 * @return O nome do produto caso exista
+	 */
+	public String getNomeProduto(String fornecedor, String nomeProduto, String descricaoProduto) {
+		String msg = "";
+
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (fornecedores.containsKey(chave)) {
+			msg = fornecedores.get(chave).getNomeProdutoFornecedor(nomeProduto, descricaoProduto);
+		} else {
+			validador.lancaExcecao("Erro ao cadastrar compra: fornecedor nao existe.");
+		}
+
+		return msg;
+	}
+
+	/**
+	 * Método que acessa o preço do produto de um determinado fornecedor.
+	 * 
+	 * @param fornecedor       Fornecedor do produto a ser acessado
+	 * @param nomeProduto      nome do produto a ser acessado
+	 * @param descricaoProduto descrição do produto a ser acessado
+	 * @return O nome do produto caso exista
+	 */
+	public double getPrecoProduto(String fornecedor, String nomeProduto, String descricaoProduto) {
+		double preco = 0;
+
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (fornecedores.containsKey(chave)) {
+			preco = fornecedores.get(chave).getPrecoProdutoFornecedor(nomeProduto, descricaoProduto);
+			
+		} else {
+			validador.lancaExcecao("Erro ao cadastrar compra: fornecedor nao existe.");
+		}
+
+		return preco;
+	}
+
+	/**
+	 * Método que acessa o nome de um determinado fornecedor, da forma que o
+	 * fornecedor foi cadastrado.
+	 * 
+	 * @param fornecedor Fornecedor que se deseja acessar o nome.
+	 * @return O nome do fornecedor caso esteja cadastrado no sistema.
+	 */
+	public String getNomeFornecedor(String fornecedor) {
+		String msg = "";
+
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (fornecedores.containsKey(chave)) {
+			msg = fornecedores.get(chave).getNome();
+		} else {
+			validador.lancaExcecao("Erro ao exibir conta do cliente: fornecedor nao existe.");
+		}
+
+		return msg;
+
+	}
+
+	/**
+	 * Método responsável por cadastrar um combo de dois produtos, inserindo o mesmo no Map de
+	 * Produtos do Fornecedor passado por parâmetro.
+	 * @param fornecedor Fornecedor do combo a ser cadastrado no sistema.
+	 * @param nome Nome do combo
+	 * @param descricao Descrição do combo
+	 * @param fator fator de desconto a ser aplicado a partir da soma dos dois produtos que geraram o combo.
+	 * @param produto1e2 nomes e descrição dos dois produtos que gerarão o combo.
+	 */
+	public void cadastraCombo(String fornecedor, String nome, String descricao, double fator, String produto1e2) {
+		validador.validaNulleVazio(fornecedor, "Erro no cadastro de combo: fornecedor nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(nome, "Erro no cadastro de combo: nome nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(descricao, "Erro no cadastro de combo: descricao nao pode ser vazia ou nula.");
+		validador.validaFator(fator, "Erro no cadastro de combo: fator invalido.");
+		validador.validaNulleVazio(produto1e2, "Erro no cadastro de combo: combo deve ter produtos.");
+
+		String chaveFornecedor = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (!existeFornecedor(chaveFornecedor)) {
+			validador.lancaExcecao("Erro no cadastro de combo: fornecedor nao existe.");
+		} else {
+			fornecedores.get(chaveFornecedor).cadastraComboFornecedor(nome, descricao, fator, produto1e2);
+
+		}
+
+	}
+	
+	/**
+	 * Método responsável por editar o fator de desconto de um combo.
+	 * @param nome Nome do combo.
+	 * @param descricao Descrição do Combo.
+	 * @param fornecedor Fornecedor do combo.
+	 * @param fator novo fator de desconto do Combo
+	 */
+	public void editaCombo(String nome, String descricao, String fornecedor, double fator) {
+
+		validador.validaNulleVazio(nome, "Erro na edicao de combo: nome nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(fornecedor, "Erro na edicao de combo: fornecedor nao pode ser vazio ou nulo.");
+		validador.validaNulleVazio(descricao, "Erro na edicao de combo: descricao nao pode ser vazia ou nula.");
+		validador.validaFator(fator, "Erro na edicao de combo: fator invalido.");
+
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (fornecedores.containsKey(chave)) {
+			fornecedores.get(chave).editaComboFornecedor(nome, descricao, fator);
+		} else {
+			validador.lancaExcecao("Erro na edicao de combo: fornecedor nao existe.");
+		}
+
+	}
 
 }

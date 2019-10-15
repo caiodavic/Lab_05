@@ -1,131 +1,54 @@
 package lab5;
 
-import java.text.NumberFormat;
-
-import utilcaio.Validacao;
-
 /**
- * Clase que representa um Produduto do sistema SAGA, com Nome, descrição e
- * preço. Seu nome e sua descrição são seus identificadores únicos.
+ * Classe Interface de Produto, contendo declarações de funções usadas nos dois
+ * tipos de Produtos que temos.
  * 
  * @author Caio Davi Pereira da Silva - 119110875
  *
  */
-public class Produto implements Comparable<Produto>{
-
+public interface Produto {
 	/**
-	 * Nome do Produto.
-	 */
-	private String nome;
-	/**
-	 * Descrição do Produto.
-	 */
-	private String descricao;
-	/**
-	 * Preço do Produto.
-	 */
-	private double preco;
-
-	/**
-	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
-	 */
-	private Validacao validador;
-
-	/**
-	 * Construtor da Classe Produto, recebendo parâmetros que não podem ser vazios
-	 * ou nulos. Caso algum seja, lançará uma exceção.
+	 * Método que acessa o Nome do produto
 	 * 
-	 * @param nome      Nome do Produto.
-	 * @param descricao Descrição do Produto.
-	 * @param preco     Preço do Produto.
+	 * @return o Nome do produto
 	 */
-	public Produto(String nome, String descricao, double preco) {
-		validador = new Validacao();
-
-		validador.validaNulleVazio(nome, "Erro no cadastro de produto: nome nao pode ser vazio ou nulo.");
-		validador.validaNulleVazio(descricao, "Erro no cadastro de produto: descricao nao pode ser vazia ou nula.");
-		validador.validaInteiro(preco, "Erro no cadastro de produto: preco invalido.");
-
-		this.nome = nome;
-		this.descricao = descricao;
-		this.preco = preco;
-
-	}
+	public String getNome();
 
 	/**
-	 * Método que retorna uma representação textual de um Produto, com nome,
-	 * descrição e preço.
-	 */
-	@Override
-	public String toString() {
-		return nome + " - " + descricao + " - " + "R$" + String.format("%.2f", preco);
-	}
-
-	/**
-	 * Método de alteração do preço do Produto
+	 * Método que acessa a Descrição do produto
 	 * 
-	 * @param preco Preço que substituirá o antigo.
+	 * @return a Descrição do produto
 	 */
-	public void setPreco(double preco) {
-		this.preco = preco;
-	}
+	public String getDescricao();
+
+	/**
+	 * Método que acessa o preço do produto
+	 * 
+	 * @return o preço do produto
+	 */
+	public double getPreco();
+
+	/**
+	 * Método que altera o preço ou o fator de desconto, no caso do Produto ser um
+	 * Combo.
+	 * 
+	 * @param valor
+	 */
+	public void setPrecoOuFator(double valor);
+
+	/**
+	 * Compara o nome doProduto e de outro Produto do sistema e retorna o
+	 * inteiro que significa qual vem primeiro na ordem alfabética.
+	  * @param o um Objeto do tipo Produto
+	 * @return inteiro que significa qual vem primeiro na ordem alfabética.
+	 */
+	public int compareTo(Produto o);
 	
 	/**
-	 * Método de acesso para o nome do Produto.
-	 * 
-	 * @return O nome do Produto.
+	 * Método resposável por gerar uma representação textual  do Produto, com Nome, Descrição e preço
+	 * @return uma String com nome, descrição e preço do produto.
 	 */
-	public String getNome() {
-		return nome;
-	}
-
-	/**
-	 * HashCode de Produto. Faz a comparação entre dois objetos do tipo Produto, e
-	 * se ambos tiverem o mesmo Nome e Descrição, retornará um número inteiro igual.
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		return result;
-	}
-
-	/**
-	 * Método que compara dois objetos do tipo Produto e retorna true, caso tenham
-	 * Nomes e Descrição iguais, ou false caso contrário.
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Produto other = (Produto) obj;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		return true;
-	}
-	
-	/**
-	 * Compara o nome do Produto e de outro Produto do fornecedor e retorna o inteiro que significa qual vem primeiro na ordem alfabética.
-	 */
-	@Override
-	public int compareTo(Produto o) {
-		return this.nome.compareTo(o.getNome());
-	}
-
-	
+	public String toString();
 
 }

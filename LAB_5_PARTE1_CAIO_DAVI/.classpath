@@ -8,6 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="/home/caiodps/lp2/Lab_05/LAB_5_PARTE1_CAIO_DAVI/testesEA/easyaccept.jar"/>
+	<classpathentry kind="lib" path="easyaccept-1.0.3-jar/easyaccept.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
