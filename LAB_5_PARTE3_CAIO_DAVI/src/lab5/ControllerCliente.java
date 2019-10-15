@@ -333,5 +333,23 @@ public class ControllerCliente {
 		msg = msg.substring(0, msg.length()-3);
 		return msg;
 	}
+	
+	public void pagaConta(String cpf, String fornecedor) {
+		
+		validador.validaNulleVazio(cpf, "Erro no pagamento de conta: cpf nao pode ser vazio ou nulo.");
+		validador.validaTamanhoCpf(cpf, "Erro no pagamento de conta: cpf invalido.");
+		validador.validaNulleVazio(fornecedor, "Erro no pagamento de conta: fornecedor nao pode ser vazio ou nulo.");
+		
+		if(!fornecedorController.existeFornecedor(fornecedor)) {
+			validador.lancaExcecao("Erro no pagamento de conta: fornecedor nao existe.");
+		}
+		
+		if(clientes.containsKey(cpf)) {
+			String chave = padronizador.concatenaChaveFornecedor(fornecedor);			
+			clientes.get(cpf).pagaContaCliente(chave);
+		} else {
+			validador.lancaExcecao("Erro no pagamento de conta: cliente nao existe.");
+		}
+	}
 
 }

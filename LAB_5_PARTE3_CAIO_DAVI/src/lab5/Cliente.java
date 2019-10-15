@@ -182,6 +182,16 @@ public class Cliente implements Comparable<Cliente> {
 		return contas;
 	}
 	
+	public void pagaContaCliente(String chave) {
+		
+		if(!contas.containsKey(chave)) {
+			validador.lancaExcecao("Erro no pagamento de conta: nao ha debito do cliente associado a este fornecedor.");
+		} else {
+			contas.remove(chave);
+			
+		}
+	}
+	
 	
 	/**
 	 * Representação textual de um cliente. Retorna uma String com o Nome,

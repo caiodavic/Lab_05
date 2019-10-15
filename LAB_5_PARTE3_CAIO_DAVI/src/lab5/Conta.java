@@ -31,6 +31,7 @@ public class Conta {
 	 * @param data        data da compra.
 	 * @param preco       preço do produto comprado
 	 */
+	
 	public Conta(String nomeProduto, String data, double preco) {
 		validador = new Validacao();
 		validador.validaNulleVazio(nomeProduto,

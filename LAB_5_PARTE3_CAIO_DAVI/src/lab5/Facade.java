@@ -101,10 +101,14 @@ public class Facade {
 	public void editaCombo(String nome, String descricao, String fornecedor, double novoFator) {
 		controleFornecedor.editaCombo(nome, descricao, fornecedor, novoFator);
 	}
+	
+	public void realizaPagamento(String cpf, String fornecedor) {
+		controleCliente.pagaConta(cpf, fornecedor);
+	}
 
 	public static void main(String[] args) {
 		args = new String[] { "lab5.Facade", "testesEA/use_case_1.txt", "testesEA/use_case_2.txt",
-				"testesEA/use_case_3.txt", "testesEA/use_case_4.txt", "testesEA/use_case_5.txt", "testesEA/use_case_6.txt" };
+				"testesEA/use_case_3.txt", "testesEA/use_case_4.txt", "testesEA/use_case_5.txt", "testesEA/use_case_6.txt", "testesEA/use_case_7.txt"};
 		EasyAccept.main(args);
 	}
 
