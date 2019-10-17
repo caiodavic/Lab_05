@@ -2,6 +2,7 @@ package lab5;
 
 import java.util.HashMap;
 
+import utilcaio.Padronizacao;
 import utilcaio.Validacao;
 
 /**
@@ -34,12 +35,14 @@ public class Cliente implements Comparable<Cliente> {
 	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
 	 */
 	private Validacao validador;
-
+	
 	/**
-	 * HashMap que tem como chave uma String com o Fornecedor da conta do cliente e armazena objetos
-	 * do tipo Conta.
+	 * Objeto da classe de padronização que transforma nomes e descrições em chaves
+	 * para mapas.
 	 */
-	private HashMap<String, Conta> contas;
+	private Padronizacao padronizador;
+	
+	
 
 	/**
 	 * Construtor da classe Cliente, recebendo parâmetros que não podem ser vazios
@@ -112,29 +115,7 @@ public class Cliente implements Comparable<Cliente> {
 		this.loc = loc;
 	}
 	
-	/**
-	 * Método que adiciona uma compra na conta do cliente em específico passado por parâmetro
-	 * @param chave chave do mapa de contas, essa chave contém relação com o nome do fornecedor que vendeu o produto
-	 * @param nomeProduto Nome do produto comprado.
-	 * @param data data da compra do produto.
-	 * @param preco preco do produto.
-	 */
-	public void adicionaCompraCliente(String chave, String nomeProduto, String data, double preco) {
-	validador.validaNulleVazio(nomeProduto,
-				"Erro ao cadastrar compra: nome do produto nao pode ser vazio ou nulo.");
 
-		validador.validaNulleVazio(data, "Erro ao cadastrar compra: data nao pode ser vazia ou nula.");
-		validador.validaTamanhoData(data, "Erro ao cadastrar compra: data invalida.");
-
-		if (contas.containsKey(chave)) {
-			this.contas.get(chave).adicionaCompra(nomeProduto, data, preco);
-		} else {
-			
-			Conta contaAux = new Conta(nomeProduto, data, preco);
-			this.contas.put(chave, contaAux);
-		}
-
-	}
 	/**
 	 * Método que exibe a conta de um cliente com um fornecedor em específico.
 	 * @param fornecedor Fornecedor a quem o cliente esta devendo para ser mostrado em tela.

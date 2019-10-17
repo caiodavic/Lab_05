@@ -2,6 +2,7 @@ package lab5;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -35,10 +36,18 @@ public class ControllerCliente {
 	ControllerFornecedor fornecedorController;
 
 	/**
+	 * HashMap que tem como chave uma String com o Fornecedor da conta do cliente e
+	 * armazena objetos do tipo Conta.
+	 */
+	private HashMap<String, ArrayList<Conta>> contas;
+
+	/**
 	 * Objeto da classe de padronização que transforma nomes e descrições em chaves
 	 * para mapas.
 	 */
 	Padronizacao padronizador;
+
+	Comparator<Compra> comparator;
 
 	/**
 	 * Construtor da classe ControllerCLiente.
@@ -219,6 +228,8 @@ public class ControllerCliente {
 		validador.validaNulleVazio(data, "Erro ao cadastrar compra: data nao pode ser vazia ou nula.");
 		validador.validaTamanhoData(data, "Erro ao cadastrar compra: data invalida.");
 
+		String chaveFornecedor = padronizador.concatenaChaveFornecedor(fornecedor);
+		
 		if (!clientes.containsKey(cpf)) {
 			validador.lancaExcecao("Erro ao cadastrar compra: cliente nao existe.");
 		} else if (!fornecedorController.existeFornecedor(fornecedor)) {
@@ -226,16 +237,38 @@ public class ControllerCliente {
 		} else if (!fornecedorController.existeProduto(fornecedor, nomeProduto, descricaoProduto)) {
 			validador.lancaExcecao("Erro ao cadastrar compra: produto nao existe.");
 		} else {
-			String chaveFornecedor = padronizador.concatenaChaveFornecedor(fornecedor);
+			if (!contas.containsKey(chaveFornecedor)) {
+				contas.put(chaveFornecedor, new ArrayList<>());
+			} 
+			
+			Cliente cliente = clientes.get(cpf);
+			Conta conta = this.getConta(chaveFornecedor, cliente, fornecedor);
+						
 			String nome = fornecedorController.getNomeProduto(fornecedor, nomeProduto, descricaoProduto);
 			double preco = fornecedorController.getPrecoProduto(fornecedor, nomeProduto, descricaoProduto);
-			
-			
-			clientes.get(cpf).adicionaCompraCliente(chaveFornecedor, nome, data, preco);
 
+			conta.adicionaCompra(nome, data, preco);
 
 		}
 
+	}
+
+	private Conta getConta(String chaveFornecedor, Cliente cliente, String fornecedor) {
+		Conta contaAux = new Conta(fornecedor,cliente);
+		boolean existe = false;
+		
+		ArrayList<Conta> arrayList = contas.get(chaveFornecedor);
+		
+		for(Conta conta : arrayList) {
+			if(conta.equals(contaAux)) {
+				contaAux = conta;
+				existe = true;
+			}
+		}
+		if(!existe) {
+			arrayList.add(contaAux);
+		}
+		return contaAux;
 	}
 
 	/**
@@ -249,7 +282,7 @@ public class ControllerCliente {
 	public String exibeConta(String cpf, String fornecedor) {
 		String msg = "";
 		String nomeCliente = "";
-		
+
 		validador.validaNulleVazio(cpf, "Erro ao exibir conta do cliente: cpf nao pode ser vazio ou nulo.");
 		validador.validaTamanhoCpf(cpf, "Erro ao exibir conta do cliente: cpf invalido.");
 		validador.validaNulleVazio(fornecedor,
@@ -281,7 +314,7 @@ public class ControllerCliente {
 	 */
 	public String totalizandoContaFornecedor(String cpf, String fornecedor) {
 		double debito = 0;
-		
+
 		validador.validaNulleVazio(cpf, "Erro ao recuperar debito: cpf nao pode ser vazio ou nulo.");
 		validador.validaTamanhoCpf(cpf, "Erro ao recuperar debito: cpf invalido.");
 		validador.validaNulleVazio(fornecedor, "Erro ao recuperar debito: fornecedor nao pode ser vazio ou nulo.");
@@ -296,8 +329,8 @@ public class ControllerCliente {
 		} else {
 			validador.lancaExcecao("Erro ao recuperar debito: cliente nao existe.");
 		}
-		
-		return (String.format(Locale.US,"%.2f", debito));
+
+		return (String.format(Locale.US, "%.2f", debito));
 	}
 
 	/**
@@ -309,43 +342,43 @@ public class ControllerCliente {
 	 */
 	public String exibeTodasAsContasCliente(String cpf) {
 		String msg = "";
-		
+
 		validador.validaNulleVazio(cpf, "Erro ao exibir contas do cliente: cpf nao pode ser vazio ou nulo.");
 		validador.validaTamanhoCpf(cpf, "Erro ao exibir contas do cliente: cpf invalido.");
-		
+
 		if (clientes.containsKey(cpf)) {
-			msg +="Cliente: " + clientes.get(cpf).getNome() + " | ";
+			msg += "Cliente: " + clientes.get(cpf).getNome() + " | ";
 		} else {
 			validador.lancaExcecao("Erro ao exibir contas do cliente: cliente nao existe.");
 		}
-		
+
 		ArrayList<String> chavesArray = new ArrayList<>(clientes.get(cpf).getMapContas().keySet());
-		
+
 		Collections.sort(chavesArray);
-		
+
 		for (String chaveAux : chavesArray) {
 
 			String nomeFornecedor = fornecedorController.getNomeFornecedor(chaveAux);
 
 			msg += clientes.get(cpf).exibeContaCliente(nomeFornecedor, chaveAux) + " | ";
 		}
-		
-		msg = msg.substring(0, msg.length()-3);
+
+		msg = msg.substring(0, msg.length() - 3);
 		return msg;
 	}
-	
+
 	public void pagaConta(String cpf, String fornecedor) {
-		
+
 		validador.validaNulleVazio(cpf, "Erro no pagamento de conta: cpf nao pode ser vazio ou nulo.");
 		validador.validaTamanhoCpf(cpf, "Erro no pagamento de conta: cpf invalido.");
 		validador.validaNulleVazio(fornecedor, "Erro no pagamento de conta: fornecedor nao pode ser vazio ou nulo.");
-		
-		if(!fornecedorController.existeFornecedor(fornecedor)) {
+
+		if (!fornecedorController.existeFornecedor(fornecedor)) {
 			validador.lancaExcecao("Erro no pagamento de conta: fornecedor nao existe.");
 		}
-		
-		if(clientes.containsKey(cpf)) {
-			String chave = padronizador.concatenaChaveFornecedor(fornecedor);			
+
+		if (clientes.containsKey(cpf)) {
+			String chave = padronizador.concatenaChaveFornecedor(fornecedor);
 			clientes.get(cpf).pagaContaCliente(chave);
 		} else {
 			validador.lancaExcecao("Erro no pagamento de conta: cliente nao existe.");

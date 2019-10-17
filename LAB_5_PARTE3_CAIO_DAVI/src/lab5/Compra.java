@@ -26,6 +26,16 @@ public class Compra {
 	private double preco;
 	
 	/**
+	 * Nome do fornecedor do produto comprado. 
+	 */
+	private String fornecedor;
+	
+	/**
+	 * Cliente comprador do produto
+	 */
+	private Cliente comprador;
+	
+	/**
 	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
 	 */
 	private Validacao validador;
@@ -42,7 +52,7 @@ public class Compra {
 	 * @param data data da compra do produto.
 	 * @param preco preço do produto comprado.
 	 */
-	public Compra(String nomeProduto, String data, double preco) {
+	public Compra(String nomeProduto, String data, double preco, String fornecedor, Cliente comprador) {
 		
 		validador = new Validacao();
 		padronizador = new Padronizacao();
@@ -55,6 +65,8 @@ public class Compra {
 		this.data = padronizador.formataData(data);
 		this.nomeProduto = nomeProduto;
 		this.preco = preco;
+		this.fornecedor = fornecedor;
+		this.comprador = comprador;
 
 	}
 	
@@ -64,6 +76,18 @@ public class Compra {
 	 */
 	public String getNomeProduto() {
 		return nomeProduto;
+	}
+	
+	public Cliente getCliente() {
+		return comprador;
+	}
+	
+	public String getNomeFornecedor() {
+		return fornecedor;
+	}
+	
+	public String getData() {
+		return data;
 	}
 	
 	/**
