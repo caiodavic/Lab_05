@@ -377,6 +377,28 @@ public class ControllerFornecedor {
 
 		return msg;
 	}
+	
+	/**
+	 * Método que acessa a descrição do produto de um determinado fornecedor, da forma
+	 * que o produto foi cadastrado.
+	 * 
+	 * @param fornecedor       Fornecedor do produto a ser acessado
+	 * @param nomeProduto      nome do produto a ser acessado
+	 * @param descricaoProduto descrição do produto a ser acessado
+	 * @return A descrição do produto caso exista
+	 */
+	public String getDescricaoProduto(String fornecedor, String nomeProduto, String descricaoProduto) {
+		String msg = "";
+
+		String chave = padronizador.concatenaChaveFornecedor(fornecedor);
+
+		if (fornecedores.containsKey(chave)) {
+			msg = fornecedores.get(chave).getDescricaoProdutoFornecedor(nomeProduto, descricaoProduto);
+		}
+
+		return msg;
+	}
+	
 
 	/**
 	 * Método que acessa o preço do produto de um determinado fornecedor.

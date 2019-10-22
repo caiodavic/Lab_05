@@ -136,4 +136,18 @@ public class Validacao {
 			throw new IllegalArgumentException(mensagemDeErro);
 		}
 	}
+
+	/**
+	 * Método que verifica se o criterio de ordenação escolhido é válido, caso não
+	 * seja, lança um erro.
+	 * 
+	 * @param criterio       criterio a ser verificado.
+	 * @param mensagemDeErro mensagem de erro com o erro a ser lançado.
+	 */
+	public void validaCriterio(String criterio, String mensagemDeErro) {
+
+		if (!criterio.equals("CLIENTE") && !criterio.equals("DATA") && !criterio.equals("FORNECEDOR")) {
+			throw new IllegalArgumentException(mensagemDeErro);
+		}
+	}
 }

@@ -2,7 +2,6 @@ package lab5;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -36,18 +35,15 @@ public class ControllerCliente {
 	ControllerFornecedor fornecedorController;
 
 	/**
-	 * HashMap que tem como chave uma String com o Fornecedor da conta do cliente e
-	 * armazena objetos do tipo Conta.
-	 */
-	private HashMap<String, ArrayList<Conta>> contas;
-
-	/**
 	 * Objeto da classe de padronização que transforma nomes e descrições em chaves
 	 * para mapas.
 	 */
 	Padronizacao padronizador;
 
-	Comparator<Compra> comparator;
+	/**
+	 * Critério de ordenação configurado.
+	 */
+	String criterio;
 
 	/**
 	 * Construtor da classe ControllerCLiente.
@@ -57,6 +53,7 @@ public class ControllerCliente {
 		this.validador = new Validacao();
 		this.fornecedorController = fornecedorController;
 		this.padronizador = new Padronizacao();
+		this.criterio = null;
 
 	}
 
@@ -228,8 +225,6 @@ public class ControllerCliente {
 		validador.validaNulleVazio(data, "Erro ao cadastrar compra: data nao pode ser vazia ou nula.");
 		validador.validaTamanhoData(data, "Erro ao cadastrar compra: data invalida.");
 
-		String chaveFornecedor = padronizador.concatenaChaveFornecedor(fornecedor);
-		
 		if (!clientes.containsKey(cpf)) {
 			validador.lancaExcecao("Erro ao cadastrar compra: cliente nao existe.");
 		} else if (!fornecedorController.existeFornecedor(fornecedor)) {
@@ -237,38 +232,15 @@ public class ControllerCliente {
 		} else if (!fornecedorController.existeProduto(fornecedor, nomeProduto, descricaoProduto)) {
 			validador.lancaExcecao("Erro ao cadastrar compra: produto nao existe.");
 		} else {
-			if (!contas.containsKey(chaveFornecedor)) {
-				contas.put(chaveFornecedor, new ArrayList<>());
-			} 
-			
-			Cliente cliente = clientes.get(cpf);
-			Conta conta = this.getConta(chaveFornecedor, cliente, fornecedor);
-						
+			String chaveFornecedor = padronizador.concatenaChaveFornecedor(fornecedor);
 			String nome = fornecedorController.getNomeProduto(fornecedor, nomeProduto, descricaoProduto);
+			String descricao = fornecedorController.getDescricaoProduto(fornecedor, nomeProduto, descricaoProduto);
 			double preco = fornecedorController.getPrecoProduto(fornecedor, nomeProduto, descricaoProduto);
 
-			conta.adicionaCompra(nome, data, preco);
+			clientes.get(cpf).adicionaCompraCliente(chaveFornecedor, nome, descricao, data, preco);
 
 		}
 
-	}
-
-	private Conta getConta(String chaveFornecedor, Cliente cliente, String fornecedor) {
-		Conta contaAux = new Conta(fornecedor,cliente);
-		boolean existe = false;
-		
-		ArrayList<Conta> arrayList = contas.get(chaveFornecedor);
-		
-		for(Conta conta : arrayList) {
-			if(conta.equals(contaAux)) {
-				contaAux = conta;
-				existe = true;
-			}
-		}
-		if(!existe) {
-			arrayList.add(contaAux);
-		}
-		return contaAux;
 	}
 
 	/**
@@ -367,6 +339,13 @@ public class ControllerCliente {
 		return msg;
 	}
 
+	/**
+	 * Método que "quita" a conta de um Cliente com um determinado Fornecedor,
+	 * excluindo o débito existente.
+	 * 
+	 * @param cpf        CPF do Cliente que se deseja pagar a conta
+	 * @param fornecedor Fornecedor da Conta que se deseja pagar.
+	 */
 	public void pagaConta(String cpf, String fornecedor) {
 
 		validador.validaNulleVazio(cpf, "Erro no pagamento de conta: cpf nao pode ser vazio ou nulo.");
@@ -383,6 +362,182 @@ public class ControllerCliente {
 		} else {
 			validador.lancaExcecao("Erro no pagamento de conta: cliente nao existe.");
 		}
+	}
+
+	/**
+	 * Método que ordena todas as compras do sistema de acordo com o critério de
+	 * ordenação que o sistema está configurado. Esse método é auxiliado por outros
+	 * métodos privados para realizar seu objetivo.
+	 * 
+	 * @return uma String com todas as compras do sistema, ordenadas pelo critério
+	 *         configurado.
+	 */
+	public String ordenaTudo() {
+		String msg = "";
+		ArrayList<String> txtCompras = new ArrayList();
+
+		validador.validaNulleVazio(criterio, "Erro na listagem de compras: criterio ainda nao definido pelo sistema.");
+
+		if (criterio.equals("CLIENTE") || criterio.equals("FORNECEDOR")) {
+			txtCompras = criaArrayCompras(criterio);
+			Collections.sort(txtCompras);
+		} else if (criterio.equals("DATA")) {
+			txtCompras = criaArrayCompras(criterio);
+			Collections.sort(txtCompras, new ComparaData());
+
+		}
+
+		for (String compra : txtCompras) {
+			msg += compra + " | ";
+		}
+
+		msg = msg.substring(0, msg.length() - 3);
+
+		return msg;
+
+	}
+
+	/**
+	 * Método que configura o critério de ordenação a ser utilizado pelo sistema.
+	 * 
+	 * @param criterio Criterio de ordenação
+	 */
+	public void setCriterioOrdenacao(String criterio) {
+		validador.validaNulleVazio(criterio, "Erro na listagem de compras: criterio nao pode ser vazio ou nulo.");
+		validador.validaCriterio(padronizador.padronizaCriterio(criterio),
+				"Erro na listagem de compras: criterio nao oferecido pelo sistema.");
+		this.criterio = padronizador.padronizaCriterio(criterio);
+	}
+
+	/**
+	 * Método privado que cria um Array com todas as compras do sistema a fim de ser
+	 * ordenado de acordo com o critério configurado. A String das compras também é
+	 * feita nesse método a partir de outros métodos auxiliares. Esse método
+	 * trabalha com os mapas de Conta de todos os Clientes.
+	 * 
+	 * @param criterio Critério configurado.
+	 * @return um ArrayList com todas as Strings de compras do sistema, ainda não
+	 *         ordenadas.
+	 */
+	private ArrayList<String> criaArrayCompras(String criterio) {
+
+		HashMap<String, Conta> mapAux = new HashMap<>();
+		ArrayList<String> txtCompras = new ArrayList<String>();
+		String nomeCliente;
+
+		if (criterio.equals("CLIENTE")) {
+			for (Cliente cliente : clientes.values()) {
+
+				nomeCliente = cliente.getNome();
+				mapAux = cliente.getMapConta();
+
+				if (!mapAux.isEmpty()) {
+					for (String chave : mapAux.keySet()) {
+						insereClienteFornecedor(txtCompras, chave, mapAux.get(chave).ordenaTudoContaPorNome(),
+								nomeCliente);
+					}
+				}
+			}
+		} else if (criterio.equals("FORNECEDOR")) {
+			for (Cliente cliente : clientes.values()) {
+
+				nomeCliente = cliente.getNome();
+				mapAux = cliente.getMapConta();
+
+				if (!mapAux.isEmpty()) {
+					for (String chave : mapAux.keySet()) {
+						insereFornecedorCliente(txtCompras, chave, mapAux.get(chave).ordenaTudoContaPorNome(),
+								nomeCliente);
+					}
+				}
+			}
+		} else if (criterio.equals("DATA")) {
+			for (Cliente cliente : clientes.values()) {
+
+				nomeCliente = cliente.getNome();
+				mapAux = cliente.getMapConta();
+
+				if (!mapAux.isEmpty()) {
+					for (String chave : mapAux.keySet()) {
+						insereFornecedorClienteData(txtCompras, chave, mapAux.get(chave).ordenaTudoContaPorData(),
+								nomeCliente);
+					}
+				}
+			}
+		}
+
+		return txtCompras;
+	}
+
+	/**
+	 * Método privado que concatena as informações que faltam quando o critério de ordenação
+	 * é o nome do Cliente. Esse método trabalha com um array das compras de uma
+	 * determinada conta com um fornecedor.
+	 * 
+	 * @param txtCompras  ArrayList com as Strings de compras do Sistema a fim de
+	 *                    ser incrementado com as Strings formadas com a execução
+	 *                    desse método.
+	 * @param chave       Chave do mapa que representa o fornecedor da conta
+	 * @param compras	  ArrayList com as compras de uma conta 
+	 * @param nomeCliente nome do Cliente a quem pertence a conta
+	 */
+	private void insereClienteFornecedor(ArrayList<String> txtCompras, String chave, ArrayList<String> compras,
+			String nomeCliente) {
+		String nomeFornecedor = fornecedorController.getNomeFornecedor(chave);
+
+		for (String compra : compras) {
+			compra = nomeCliente + ", " + nomeFornecedor + ", " + compra;
+			txtCompras.add(compra);
+		}
+
+	}
+	
+	/**
+	 * Método privado que concatena as informações que faltam quando o critério de ordenação
+	 * é o nome do Fornecedor. Esse método trabalha com um array das compras de uma
+	 * determinada conta com um fornecedor.
+	 * 
+	 * @param txtCompras  ArrayList com as Strings de compras do Sistema a fim de
+	 *                    ser incrementado com as Strings formadas com a execução
+	 *                    desse método.
+	 * @param chave       Chave do mapa que representa o fornecedor da conta
+	 * @param compras	  ArrayList com as compras de uma conta 
+	 * @param nomeCliente nome do Cliente a quem pertence a conta
+	 */
+	private void insereFornecedorCliente(ArrayList<String> txtCompras, String chave, ArrayList<String> compras,
+			String nomeCliente) {
+		String nomeFornecedor = fornecedorController.getNomeFornecedor(chave);
+
+		for (String compra : compras) {
+			compra = nomeFornecedor + ", " + nomeCliente + ", " + compra;
+			txtCompras.add(compra);
+		}
+
+	}
+	
+	/**
+	 * Método privado que concatena as informações que faltam quando o critério de ordenação
+	 * é a data da Compra. Esse método trabalha com um array das compras de uma
+	 * determinada conta com um fornecedor.
+	 * 
+	 * @param txtCompras  ArrayList com as Strings de compras do Sistema a fim de
+	 *                    ser incrementado com as Strings formadas com a execução
+	 *                    desse método.
+	 * @param chave       Chave do mapa que representa o fornecedor da conta
+	 * @param compras	  ArrayList com as compras de uma conta 
+	 * @param nomeCliente nome do Cliente a quem pertence a conta
+	 */
+	private void insereFornecedorClienteData(ArrayList<String> txtCompras, String chave, ArrayList<String> compras,
+			String nomeCliente) {
+		String nomeFornecedor = fornecedorController.getNomeFornecedor(chave);
+		String[] divisao = new String[2];
+
+		for (String compra : compras) {
+			divisao = compra.split(",");
+			compra = divisao[0] + ", " + nomeCliente + ", " + nomeFornecedor + ", " + divisao[1];
+			txtCompras.add(compra);
+		}
+
 	}
 
 }

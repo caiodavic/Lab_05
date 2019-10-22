@@ -74,4 +74,13 @@ public class Padronizacao {
 	public String formataData(String data) {
 		return data.replace("/", "-");
 	}
+	
+	/**
+	 * Método que padroniza a entrada de critério de ordenação a fim de não ter problema se inserir caracteres maiusculos, minusculos ou até espaço a mais
+	 * @param criterio string a ser padronizada
+	 * @return a string que foi parâmetro da função toda em maiúsculo e sem espaços a mais.
+	 */
+	public String padronizaCriterio(String criterio) {
+		return criterio.trim().toUpperCase();
+	}
 }

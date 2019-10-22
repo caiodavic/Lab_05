@@ -1,8 +1,8 @@
 package lab5;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import utilcaio.Padronizacao;
 import utilcaio.Validacao;
 
 /**
@@ -35,14 +35,12 @@ public class Cliente implements Comparable<Cliente> {
 	 * Objeto da classe validação que verifica se entradas são vazias ou nulas.
 	 */
 	private Validacao validador;
-	
+
 	/**
-	 * Objeto da classe de padronização que transforma nomes e descrições em chaves
-	 * para mapas.
+	 * HashMap que tem como chave uma String com o Fornecedor da conta do cliente e
+	 * armazena objetos do tipo Conta.
 	 */
-	private Padronizacao padronizador;
-	
-	
+	private HashMap<String, Conta> contas;
 
 	/**
 	 * Construtor da classe Cliente, recebendo parâmetros que não podem ser vazios
@@ -87,7 +85,7 @@ public class Cliente implements Comparable<Cliente> {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	/**
 	 * Método de acesso para o Nome do cliente.
 	 * 
@@ -114,66 +112,106 @@ public class Cliente implements Comparable<Cliente> {
 	public void setLoc(String loc) {
 		this.loc = loc;
 	}
-	
+
+	/**
+	 * Método que adiciona uma compra na conta do cliente em específico passado por
+	 * parâmetro
+	 * 
+	 * @param chave       chave do mapa de contas, essa chave contém relação com o
+	 *                    nome do fornecedor que vendeu o produto
+	 * @param nomeProduto Nome do produto comprado.
+	 * @param data        data da compra do produto.
+	 * @param preco       preco do produto.
+	 */
+	public void adicionaCompraCliente(String chave, String nomeProduto, String descricaoProduto, String data,
+			double preco) {
+		validador.validaNulleVazio(nomeProduto,
+				"Erro ao cadastrar compra: nome do produto nao pode ser vazio ou nulo.");
+
+		validador.validaNulleVazio(data, "Erro ao cadastrar compra: data nao pode ser vazia ou nula.");
+		validador.validaTamanhoData(data, "Erro ao cadastrar compra: data invalida.");
+
+		if (contas.containsKey(chave)) {
+			this.contas.get(chave).adicionaCompra(nomeProduto, descricaoProduto, data, preco);
+		} else {
+
+			Conta contaAux = new Conta(nomeProduto, descricaoProduto, data, preco);
+			this.contas.put(chave, contaAux);
+		}
+
+	}
 
 	/**
 	 * Método que exibe a conta de um cliente com um fornecedor em específico.
-	 * @param fornecedor Fornecedor a quem o cliente esta devendo para ser mostrado em tela.
-	 * @param chave chave do mapa de contas, essa chave contém relação com o nome do fornecedor que o cliente esta com débito.
+	 * 
+	 * @param fornecedor Fornecedor a quem o cliente esta devendo para ser mostrado
+	 *                   em tela.
+	 * @param chave      chave do mapa de contas, essa chave contém relação com o
+	 *                   nome do fornecedor que o cliente esta com débito.
 	 * @return Representação textual da conta do cliente com aquele fornecedor
 	 */
 	public String exibeContaCliente(String fornecedor, String chave) {
 		String msg = "";
-		
-		if(contas.containsKey(chave)) {
+
+		if (contas.containsKey(chave)) {
 			msg = fornecedor + " | " + contas.get(chave).exibeComprasConta();
 		} else {
 			validador.lancaExcecao("Erro ao exibir conta do cliente: cliente nao tem nenhuma conta com o fornecedor.");
 		}
-		
-		
+
 		return msg;
 	}
-	
+
 	/**
 	 * Método que exibe o débito do cliente com determinado fornecedor.
-	 * @param chave chave do mapa de contas, essa chave contém relação com o nome do fornecedor que o cliente esta com débito.
+	 * 
+	 * @param chave chave do mapa de contas, essa chave contém relação com o nome do
+	 *              fornecedor que o cliente esta com débito.
 	 * @return débito do cliente com aquele fornecedor
 	 */
 	public double totalizandoContaFornecedor(String chave) {
 		double debito = 0;
-		
-		if(contas.containsKey(chave)) {
+
+		if (contas.containsKey(chave)) {
 			debito = contas.get(chave).somaDebitoConta();
 		} else {
 			validador.lancaExcecao("Erro ao recuperar debito: cliente nao tem debito com fornecedor.");
 		}
-		
+
 		return debito;
 	}
-	
+
 	/**
 	 * Método de acesso ao HashMap de contas.
+	 * 
 	 * @return o HashMap de todas as contas de determinado cliente
 	 */
-	public HashMap<String,Conta> getMapContas(){
-		if(contas.isEmpty()) {
+	public HashMap<String, Conta> getMapContas() {
+		if (contas.isEmpty()) {
 			validador.lancaExcecao("Erro ao exibir contas do cliente: cliente nao tem nenhuma conta.");
 		}
 		return contas;
 	}
-	
+
 	public void pagaContaCliente(String chave) {
-		
-		if(!contas.containsKey(chave)) {
+
+		if (!contas.containsKey(chave)) {
 			validador.lancaExcecao("Erro no pagamento de conta: nao ha debito do cliente associado a este fornecedor.");
 		} else {
 			contas.remove(chave);
-			
+
 		}
 	}
-	
-	
+
+	/**
+	 * Método de acesso ao mapa de Contas do Cliente.
+	 * 
+	 * @return um HashMap com as contas do Cliente
+	 */
+	public HashMap<String, Conta> getMapConta() {
+		return contas;
+	}
+
 	/**
 	 * Representação textual de um cliente. Retorna uma String com o Nome,
 	 * Localização e Email.

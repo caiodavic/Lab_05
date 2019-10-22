@@ -281,6 +281,26 @@ public class Fornecedor implements Comparable<Fornecedor> {
 
 		return msg;
 	}
+	
+
+	/**
+	 * Método que acessa a descrição de um produto desse fornecedor, da forma que o
+	 * produto foi cadastrado.
+	 * 
+	 * @param nomeProduto      nome do produto a ser acessado
+	 * @param descricaoProduto descrição do produto a ser acessado
+	 * @return A descrição do produto caso exista
+	 */
+	public String getDescricaoProdutoFornecedor(String nome, String descricao) {
+		String msg = "";
+		String chave = padronizador.concatenaChaveProduto(nome, descricao);
+
+		if (produtos.containsKey(chave)) {
+			msg = produtos.get(chave).getDescricao();
+		}
+
+		return msg;
+	}
 
 	/**
 	 * Método que acessa o preço de um produto desse fornecedor.
